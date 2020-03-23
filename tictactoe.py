@@ -7,6 +7,7 @@ class TicTacToe:
         self.board = [" ", " ", " ", 
                       " ", " ", " ", 
                       " ", " ", " "]
+        self.arr = []
 
     def show(self):
         """Format and print board"""
@@ -109,6 +110,12 @@ class TicTacToe:
                 bestValue = min(bestValue, moveValue)
             return bestValue
 
+    def checker(self, list):
+        if list in self.arr:
+            return False
+        else:
+            self.arr.append(list)
+
 def changePlayer(player):
     """Returns the opposite player given any player"""
     if player == "X":
@@ -143,15 +150,22 @@ if __name__ == '__main__':
     
     while game.gameOver() == False:
         person_move = int(input("You are X: Choose number from 1-9: "))
-        game.makeMove(person_move-1, "X")
-        game.show()
+        if person_move >= 1 and person_move <= 9:
+            if game.checker(person_move-1) == False:
+                print("Chosen, choose another")
+            else:
+                game.makeMove(person_move-1, "X")
+                game.show()
 
-        if game.gameOver() == True:
-            break
+                if game.gameOver() == True:
+                    break
 
-        print("Computer choosing move...")
-        ai_move = make_best_move(game, -1, "O")
-        game.makeMove(ai_move, "O")
+                print("Computer choosing move...")
+                ai_move = make_best_move(game, -1, "O")
+                game.makeMove(ai_move, "O")
+                game.checker(ai_move)
+        else:
+            print("Your input is false")
         game.show()
 
     print("Game Over. " + game.whoWon() + " Wins")
