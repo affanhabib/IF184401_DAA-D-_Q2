@@ -2,6 +2,16 @@ import random
 
 class TicTacToe:
 
+    
+    
+    def changePlayer(player):
+    """Returns the opposite player given any player"""
+    if player == "X":
+        return "O"
+    else:
+        return "X"
+    
+    
     def __init__(self):
         """Initialize with empty board"""
         self.board = [" ", " ", " ", 
