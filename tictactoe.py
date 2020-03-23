@@ -18,6 +18,19 @@ class TicTacToe:
           {} | {} | {}
         """.format(*self.board))
 
+    def clearBoard(self):
+        self.board = [" ", " ", " ", 
+                      " ", " ", " ", 
+                      " ", " ", " "]
+
+    def whoWon(self):
+        if self.checkWin() == "X":
+            return "X"
+        elif self.checkWin() == "O":
+            return "O"
+        elif self.gameOver() == True:
+            return "Nobody"
+
     def availableMoves(self):
         """Return empty spaces on the board"""
         moves = []
@@ -33,18 +46,9 @@ class TicTacToe:
             if self.board[i] == player:
                 moves.append(i)
         return moves
-   
-    def getSquares(self, player):
-        squares = []
-        for i in range(0, len(self.board)):
-            if self.board[i] == player:
-                squares.append(i)
-        return squares
 
     def makeMove(self, position, player):
         self.board[position] = player
-
-
 
     def checkWin(self):
         """Return the player that wins the game"""
@@ -122,6 +126,7 @@ def make_best_move(board, depth, player):
 
         if moveValue > neutralValue:
             choices = [move]
+            break
         elif moveValue == neutralValue:
             choices.append(move)
     print("choices: ", choices)
@@ -145,8 +150,8 @@ if __name__ == '__main__':
             break
 
         print("Computer choosing move...")
-        ai_move = make_best_move(game, 2, "O")
+        ai_move = make_best_move(game, -1, "O")
         game.makeMove(ai_move, "O")
         game.show()
 
-    print("Game Over.") 
+    print("Game Over. " + game.whoWon() + " Wins")
