@@ -1,16 +1,6 @@
 import random
 
 class TicTacToe:
-
-    
-    
-    def changePlayer(player):
-    """Returns the opposite player given any player"""
-    if player == "X":
-        return "O"
-    else:
-        return "X"
-    
     
     def __init__(self):
         """Initialize with empty board"""
@@ -68,6 +58,47 @@ class TicTacToe:
             if i == " ":
                 return False
         return True
+
+    def minimax(self, node, depth, player):
+        """
+        Recursively analyze every possible game state and choose
+        the best move location.
+        node - the board
+        depth - how far down the tree to look
+        player - what player to analyze best move for (currently setup up ONLY for "O")
+        """
+        if depth == 0 or node.gameOver():
+            if node.checkWin() == "X":
+                return 0
+            elif node.checkWin() == "O":
+                return 100
+            else:
+                return 50
+
+        if player == "O":
+            bestValue = 0
+            for move in node.availableMoves():
+                node.makeMove(move, player)
+                moveValue = self.minimax(node, depth-1, changePlayer(player))
+                node.makeMove(move, " ")
+                bestValue = max(bestValue, moveValue)
+            return bestValue
+
+        if player == "X":
+            bestValue = 100
+            for move in node.availableMoves():
+                node.makeMove(move, player)
+                moveValue = self.minimax(node, depth-1, changePlayer(player))
+                node.makeMove(move, " ")
+                bestValue = min(bestValue, moveValue)
+            return bestValue
+
+def changePlayer(player):
+    """Returns the opposite player given any player"""
+    if player == "X":
+        return "O"
+    else:
+        return "X"
 
 if __name__ == '__main__':
     game = TicTacToe()
