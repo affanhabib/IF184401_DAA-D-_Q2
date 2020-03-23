@@ -33,6 +33,18 @@ class TicTacToe:
             if self.board[i] == player:
                 moves.append(i)
         return moves
+   
+    def getSquares(self, player):
+        squares = []
+        for i in range(0, len(self.board)):
+            if self.board[i] == player:
+                squares.append(i)
+        return squares
+
+    def makeMove(self, position, player):
+        self.board[position] = player
+
+
 
     def checkWin(self):
         """Return the player that wins the game"""
@@ -99,7 +111,42 @@ def changePlayer(player):
         return "O"
     else:
         return "X"
+    
+def make_best_move(board, depth, player):
+    neutralValue = 50
+    choices = []
+    for move in board.availableMoves():
+        board.makeMove(move, player)
+        moveValue = board.minimax(board, depth-1, changePlayer(player))
+        board.makeMove(move, " ")
+
+        if moveValue > neutralValue:
+            choices = [move]
+        elif moveValue == neutralValue:
+            choices.append(move)
+    print("choices: ", choices)
+
+    if len(choices) > 0:
+        return random.choice(choices)
+    else:
+        return random.choice(board.availableMoves())
+    
 
 if __name__ == '__main__':
     game = TicTacToe()
     game.show()
+    
+    while game.gameOver() == False:
+        person_move = int(input("You are X: Choose number from 1-9: "))
+        game.makeMove(person_move-1, "X")
+        game.show()
+
+        if game.gameOver() == True:
+            break
+
+        print("Computer choosing move...")
+        ai_move = make_best_move(game, 2, "O")
+        game.makeMove(ai_move, "O")
+        game.show()
+
+    print("Game Over.") 
